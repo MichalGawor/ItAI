@@ -70,39 +70,47 @@ class Population:
             fitness_sum += individual.calc_fitness(points)
         return fitness_sum/len(self.population)
 
-    def get_fitness_vector(self, points):
+    def get_fitness_list(self, points):
         fitness_list = []
         for individual in self.population:
             fitness_list.append(individual.calc_fitness(points))
-        return np.asarray(fitness_list)
+        return fitness_list
 
-    def poly_params_vector(self):
+    def calc_spatial_distances(self, individual_params):
         poly_vector = []
         for individual in self.population:
             poly_vector.append(individual.polynomial.params)
-        return poly_vector
+        poly_vector = np.asarray(poly_vector)
+        distances = cdist(poly_vector, individual_params, 'euclidean')
+        return distances/sum(distances)
 
-    def calc_probabilities(self, points):
+    def calc_probabilities(self, fitness_list):
         """ calculates list of probabilities depending on the fitness
 
         :param points: (x, y, class) Numpy matrix of points belonging to two classes {-1, 1}
         :return list of probabilities (sums to 1) of choosing individual for crossover
         """
+        fitness_sum = 0.0
         probability_list = []
-        fitness_sum = 0
-        # calculate fitnesses for individuals
-        for individual in self.population:
-            probability_list.append(individual.calc_fitness(points))
-            fitness_sum += individual.calc_fitness(points)
+        for fitness_value in fitness_list:
+            probability_list.append(fitness_value)
+            fitness_sum += fitness_value
         # transpose fitness value into probability (fitness/sum of fitnesses)
         return [fitness_value / fitness_sum for fitness_value in probability_list]
 
-    def crossover(self, probability_list):
-        parents_first = random.choices(self.population, weights=probability_list, k=int(len(self.population)/2))
+    def crossover(self, fitness_list):
+        parents_first = random.choices(self.population, weights=self.calc_probabilities(fitness_list),
+                                       k=int(len(self.population)/2))
         # TODO change simple probability calculated with fitness to use polynomial distance metric
         # simple parent choose
-        parents_second = random.choices(self.population, weights=probability_list, k=int(len(self.population)/2))
-        parents = zip(parents_first, parents_second)
+        fitness_vector = np.asarray(fitness_list)
+        parents = []
+        for first_parent in parents_first:
+            second_parent = random.choices(
+                self.population,
+                weights=(fitness_vector * self.calc_spatial_distances(
+                    first_parent.polynomial.params[:, np.newaxis].transpose()).transpose()).transpose(), k=1)
+            parents.append((first_parent, second_parent[0]))
         children = []
         for pair in parents:
             crossover_position = random.randrange(0, 4)
@@ -124,7 +132,7 @@ class Population:
                         individual.polynomial.change_param(i, -1*mutation_value)
 
     def evolve_generation(self, points, mutation_probability, mutation_value):
-        self.crossover(self.calc_probabilities(points))
+        self.crossover(self.get_fitness_list(points))
         self.mutation(mutation_probability, mutation_value)
         print("Generation no. ", self.get_generation(), " successfully evolved")
         print("Pop: ", self.get_pop(), ", Best fitness: ", self.get_bestfit(points),
@@ -158,9 +166,6 @@ def points_generator(clusters, _range=0.1, quantity=100):
 
 if __name__ == "__main__":
     clusters = np.array([[0.1, 0.1], [0.5, 0.2], [0.8, 0.5]])
-    fdc = np.array([[1, 2, 3]])
-    test = np.array([[1, 2, 3], [1, 2, 3], [2, 2, 2]])
-
     population = Population(200)
     population.run(points_generator(clusters))
 

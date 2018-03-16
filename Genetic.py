@@ -1,19 +1,23 @@
 import random
 import numpy as np
-from scipy.spatial.distance import pdist
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
-from sklearn.metrics.pairwise import pairwise_distances
+import time
 
 
 class Polynomial:
     def __init__(self, parameters):
         self.params = parameters
+        self.degree = self.params.shape[0] - 1
 
     def get_value(self, x):
-        return np.add(
-            np.add(pow(x, 3)*self.params[0], pow(x, 2)*self.params[1]),
-            np.add(x*self.params[2], self.params[3]))
+        ret_val = self.params[self.degree]
+        for i in range(1, self.degree+1):
+            ret_val = np.add(ret_val, pow(x, i)*self.params[self.degree-i])
+        return ret_val
+
+    def get_degree(self):
+        return self.degree
 
     def change_param(self, position, value):
         self.params[position] += value
@@ -44,7 +48,9 @@ class Population:
         :param pop: (int)Number of individuals in population
 
         """
+        self.best_individual = Individual()
         self.generation = 0
+        self.best_fit = 0.0
         self.population = []
         for i in range(0, pop):
             new_individual = Individual()
@@ -57,12 +63,11 @@ class Population:
         return self.generation
 
     def get_bestfit(self, points):
-        best_fit = 0.0
         for individual in self.population:
             fit = individual.calc_fitness(points)
-            if fit > best_fit:
-                best_fit = fit
-        return best_fit
+            if fit > self.best_fit:
+                self.best_fit = fit
+                self.best_individual = individual
 
     def get_avgfit(self, points):
         fitness_sum = 0.0
@@ -84,25 +89,28 @@ class Population:
         distances = cdist(poly_vector, individual_params, 'euclidean')
         return distances/sum(distances)
 
-    def calc_probabilities(self, fitness_list):
-        """ calculates list of probabilities depending on the fitness
-
-        :param points: (x, y, class) Numpy matrix of points belonging to two classes {-1, 1}
-        :return list of probabilities (sums to 1) of choosing individual for crossover
-        """
+    @staticmethod
+    def calc_probabilities(fitness_list):
         fitness_sum = 0.0
         probability_list = []
         for fitness_value in fitness_list:
             probability_list.append(fitness_value)
             fitness_sum += fitness_value
-        # transpose fitness value into probability (fitness/sum of fitnesses)
+        # transpose fitness value into probability (fitness/sum of finesses)
         return [fitness_value / fitness_sum for fitness_value in probability_list]
 
-    def crossover(self, fitness_list):
-        parents_first = random.choices(self.population, weights=self.calc_probabilities(fitness_list),
-                                       k=int(len(self.population)/2))
-        # TODO change simple probability calculated with fitness to use polynomial distance metric
-        # simple parent choose
+    def crossover(self, points, fitness_list):
+        parents_first = []
+        for i in range(0, int(len(self.population)/2)):
+            tournament = random.choices(self.population, weights=self.calc_probabilities(fitness_list),
+                                        k=5)
+            best_fit = 0.0
+            best_parent = Individual()
+            for parent in tournament:
+                if parent.calc_fitness(points) > best_fit:
+                    best_fit = parent.calc_fitness(points)
+                    best_parent = parent
+            parents_first.append(best_parent)
         fitness_vector = np.asarray(fitness_list)
         parents = []
         for first_parent in parents_first:
@@ -113,7 +121,7 @@ class Population:
             parents.append((first_parent, second_parent[0]))
         children = []
         for pair in parents:
-            crossover_position = random.randrange(0, 4)
+            crossover_position = random.randrange(0, pair[0].polynomial.degree+1)
             first_child = Individual(params=np.append(pair[0].polynomial.params[0:crossover_position],
                                                       pair[1].polynomial.params[crossover_position:]))
             second_child = Individual(params=np.append(pair[1].polynomial.params[0:crossover_position],
@@ -122,37 +130,46 @@ class Population:
             children.append(second_child)
         self.population = children
 
-    def mutation(self, mutation_probability, mutation_value):
+    def mutation(self, mutation_probability):
         for individual in self.population:
-            for i in range(0, 4):
-                if random.randrange(0, 100) < mutation_probability*100:
-                    if random.randrange(0, 2) == 0:
-                        individual.polynomial.change_param(i, mutation_value)
-                    else:
-                        individual.polynomial.change_param(i, -1*mutation_value)
+            if random.randrange(0, 100) < mutation_probability*100:
+                for i in range(0, individual.polynomial.degree+1):
+                    individual.polynomial.change_param(i, random.uniform(-10.0, 10.0))
 
-    def evolve_generation(self, points, mutation_probability, mutation_value):
-        self.crossover(self.get_fitness_list(points))
-        self.mutation(mutation_probability, mutation_value)
-        print("Generation no. ", self.get_generation(), " successfully evolved")
-        print("Pop: ", self.get_pop(), ", Best fitness: ", self.get_bestfit(points),
-              ", Avg Fitness: ", self.get_avgfit(points))
+    def evolve_generation(self, points, _avg_fit, _best_fit, mutation_probability):
+        # perform crossover operation over population
+        self.crossover(points, self.get_fitness_list(points))
         self.generation += 1
+        # perform mutation operation over newly created generation
+        self.mutation(mutation_probability)
+        print("Generation no. ", self.get_generation(), " successfully evolved")
+        print("Pop: ", self.get_pop(), ", Best fitness: ", self.best_fit,
+              ", Avg Fitness: ", self.get_avgfit(points))
+        self.get_bestfit(points)
+        _avg_fit.append(self.get_avgfit(points))
+        _best_fit.append(self.best_fit)
 
-    def run(self, points, mutation_probability=0.1, mutation_value=1):
-        while self.get_bestfit(points) != 1.0:
-            self.evolve_generation(points, mutation_probability, mutation_value)
+    def run(self, points, generation_number, mutation_probability=0.1):
+        '''
+        This method runs genetic algorithm over population
+
+        :param points: matrix nx3 (x, y, class) && class = {-1, 1}
+        :param generation_number: number of generations which will be generated during run
+        :param mutation_probability: probability of individual mutation <0, 1>
+        :return: (value of fitness of the best individual in whole run <0, 1>,
+        best individual in whole run, [] of average fitness over generations,
+        [] of best fitness over generations
+        '''
+
+        _best_fit = []
+        _avg_fit = []
+        while self.generation < generation_number:
+            self.evolve_generation(points, _avg_fit, _best_fit, mutation_probability)
+
+        return _avg_fit, _best_fit
 
 
-def points_generator(clusters, _range=0.1, quantity=100):
-    '''
-
-    :param clusters: numpy matrix [[x, y]...] of clusters origins
-    :param _range: (dx, dy) max range in both directions from the cluster origin
-    :param quantity: number of points in each cluster
-    :return: numpy matrix [[x, y, class]...] of generated points belonging to class {-1, 1}
-    '''
-
+def points_generator(clusters, _range=0.1, quantity=20):
     points = []
     for i in range(0, clusters.shape[0]):
         for j in range(0, quantity):
@@ -164,10 +181,56 @@ def points_generator(clusters, _range=0.1, quantity=100):
     return np.asarray(points)
 
 
+def brute_force(points):
+    individual = Individual()
+    while individual.calc_fitness(points) != 1.0:
+        individual = Individual()
+    return individual
+
 if __name__ == "__main__":
-    clusters = np.array([[0.1, 0.1], [0.5, 0.2], [0.8, 0.5]])
-    population = Population(200)
-    population.run(points_generator(clusters))
+    clusters = np.array([[0.4, 0.5], [0.4, 0.42]])
+    population = Population(100)
+    data_set = points_generator(clusters)
+
+    start = time.time()
+    # BRUTAL
+    # best_poly = brute_force(data_set)
+    # polynomial = np.poly1d(best_poly.polynomial.params.transpose())
+    avg_fit, best_fit = population.run(data_set, 100, mutation_probability=0.2)
+    stop = time.time()
+    print("Time elapsed: ", stop - start, "s")
+
+    # plot best individual and points
+    polynomial = np.poly1d(population.best_individual.polynomial.params.transpose())
+    x = np.linspace(0.28, 0.52, 100)
+    y = polynomial(x)
+    my_colors = np.array(['tab:blue', 'tab:orange'])
+    for i in range(0, data_set[:, :].shape[0]):
+        if data_set[i, 2] == -1:
+            data_set[i, 2] = 0
+    plt.scatter(x=data_set[:, 0], y=data_set[:, 1], c=my_colors[data_set[:, 2].astype(int)])
+    plt.plot(x, y)
+    plt.show()
+
+    # plot graph of best fitness over generation distribution
+    fig, ax = plt.subplots()
+    idx = np.arange(1, len(best_fit)+1)
+    ax.set_xticks(idx)
+    ax.set_ylim([0, 1])
+    plt.xlabel('Generation')
+    plt.ylabel('Best Fitness')
+    plt.bar(idx, best_fit)
+    plt.show()
+
+    # plot graph of average fitness over generation distribution
+    fig, ax = plt.subplots()
+    idx = np.arange(1, len(avg_fit)+1)
+    ax.set_xticks(idx)
+    ax.set_ylim([0, 1])
+    plt.xlabel('Generation')
+    plt.ylabel('Average Fitness')
+    plt.bar(idx, avg_fit)
+    plt.show()
 
 
 

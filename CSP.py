@@ -2,6 +2,13 @@ import itertools as it
 import numpy as np
 from scipy.spatial.distance import pdist
 
+'''
+This script finds a solution to CSP problem stated as:
+In square map nxn fill all the cell using letters x and y in the way that there are no more
+then two same consecutive letters neither in rows nor in columns and all rows and columns 
+are unique
+'''
+
 
 def create_rows(n, rows):
     '''
@@ -14,7 +21,7 @@ def create_rows(n, rows):
 def create_row(n, row, rows):
     '''
     Recursive function for creating rows in binary tree schema so that no element in the row
-    equals two preceding
+    equals two predecessors
                                             x,y
                                            /   \
                                           x    y
@@ -27,7 +34,8 @@ def create_row(n, row, rows):
     :param n: length of the row according to the size specified by the user
     :param row: [] - row to which next element will be append till it is of lenght = n
     :param rows: [[]] - list of rows to which created rows are appended
-    :return: [[]] -list n x n of n rows consisting of n values {x, y} so they satisfy row constraints
+    :return: [[]] -list n x n of n rows consisting of n values {-1, 1} (numerical interpretation
+    of {x, y} so they satisfy row constraints
     '''
     if len(row) == n:
         rows.append(row[:])
@@ -90,6 +98,11 @@ def del_from_domain(domain, row):
 
 
 def forward_check(matrix, domain):
+    '''
+    :param matrix: actual state of matrix
+    :param domain: actual domain for choosing row to append
+    :return: removes from the domain rows which will not satisfy the problem
+    '''
     new_domain = []
     summed_rows = matrix[-2:, :].sum(axis=0)
     for row in domain:
@@ -99,7 +112,7 @@ def forward_check(matrix, domain):
     return new_domain
 
 
-def append_row(matrix, domain):
+def append_rows(matrix, domain):
     if matrix.shape[0] > 1:
         checked_domain = forward_check(matrix, domain)
     else:
@@ -113,7 +126,7 @@ def append_row(matrix, domain):
         elif constraint_satisfied(matrix):
             actual_domain = domain[:]
             actual_domain = del_from_domain(actual_domain, row)
-            return append_row(matrix, actual_domain)
+            return append_rows(matrix, actual_domain)
         matrix = matrix[:-1, :]
     return
 
@@ -128,7 +141,7 @@ def solve_mosaic(rows):
         i = 0
         domain = del_from_domain(domain, matrix)
         '''Start recurse'''
-        ret = append_row(matrix, domain)
+        ret = append_rows(matrix, domain)
         if ret is not None:
             print("SOLVED")
             print(ret)

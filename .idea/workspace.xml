@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="514f843d-a2a3-4d2d-a420-d2e10e8fc2b2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CSP.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Genetic.py" afterPath="$PROJECT_DIR$/Genetic.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CSP.py" afterPath="$PROJECT_DIR$/CSP.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,8 +17,8 @@
       <file leaf-file-name="CSP.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CSP.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="80" column="21" lean-forward="false" selection-start-line="80" selection-start-column="21" selection-end-line="80" selection-end-column="21" />
+            <state relative-caret-position="288">
+              <caret line="111" column="37" lean-forward="false" selection-start-line="111" selection-start-column="37" selection-end-line="111" selection-end-column="37" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -549,8 +547,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CSP.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="80" column="21" lean-forward="false" selection-start-line="80" selection-start-column="21" selection-end-line="80" selection-end-column="21" />
+        <state relative-caret-position="288">
+          <caret line="111" column="37" lean-forward="false" selection-start-line="111" selection-start-column="37" selection-end-line="111" selection-end-column="37" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>

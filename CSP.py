@@ -73,13 +73,10 @@ def make_rows_vectors(rows):
 
 def constraint_satisfied(matrix):
     if (-3 in matrix[-3:, :].sum(axis=0) or 3 in matrix[-3:, :].sum(axis=0)) and matrix.shape[0]>2:
-        print(matrix[-3:, :].sum(axis=0))
         return False
     if matrix.shape[1] == matrix.shape[0]:
         zeros_vector = np.zeros(matrix.shape[1])
-        print(zeros_vector)
-        print(pdist(matrix, metric='hamming'))
-        if any(pdist(matrix, metric='hamming')[:] == zeros_vector):
+        if 0 in (pdist(matrix, metric='hamming')):
             return False
     return True
 
@@ -110,7 +107,11 @@ def solve_mosaic(rows):
         '''Set the first row and remove it from the domain'''
         matrix = row
         domain = rows[:]
-        domain.pop(domain.index(row))
+        i = 0
+        for actual_row in rows:
+            if np.array_equal(actual_row, matrix):
+                del domain[i]
+            i += 1
         '''Start recurse'''
         ret = append_row(matrix, domain)
         if ret is not None:

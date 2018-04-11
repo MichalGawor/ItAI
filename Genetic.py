@@ -163,7 +163,7 @@ class Population:
 
         _best_fit = []
         _avg_fit = []
-        while self.generation < generation_number:
+        while self.best_fit > 0.95:
             self.evolve_generation(points, _avg_fit, _best_fit, mutation_probability)
 
         return _avg_fit, _best_fit
@@ -188,7 +188,7 @@ def brute_force(points):
     return individual
 
 if __name__ == "__main__":
-    clusters = np.array([[0.4, 0.5], [0.4, 0.42]])
+    clusters = np.array([[0.1, 0.1], [0.35, 0.4], [0.6, 0.1]])
     population = Population(100)
     data_set = points_generator(clusters)
 
@@ -202,7 +202,7 @@ if __name__ == "__main__":
 
     # plot best individual and points
     polynomial = np.poly1d(population.best_individual.polynomial.params.transpose())
-    x = np.linspace(0.28, 0.52, 100)
+    x = np.linspace(0.0, 0.75, 100)
     y = polynomial(x)
     my_colors = np.array(['tab:blue', 'tab:orange'])
     for i in range(0, data_set[:, :].shape[0]):

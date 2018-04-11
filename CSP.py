@@ -72,52 +72,68 @@ def make_rows_vectors(rows):
 
 
 def constraint_satisfied(matrix):
-    if (-3 in matrix[-3:, :].sum(axis=0) or 3 in matrix[-3:, :].sum(axis=0)) and matrix.shape[0]>2:
+    if (-3 in matrix[-3:, :].sum(axis=0) or 3 in matrix[-3:, :].sum(axis=0)) and matrix.shape[0] > 2:
+        # print(matrix)
+        # print(matrix[-3, :])
         return False
     if matrix.shape[1] == matrix.shape[0]:
-        zeros_vector = np.zeros(matrix.shape[1])
-        if 0 in (pdist(matrix, metric='hamming')):
+        if 0.0 in (pdist(matrix, metric='euclidean')):
+            print("JEST")
             return False
     return True
 
+
+def del_from_domain(domain, row):
+    i = 0
+    for actual_row in domain:
+        if np.array_equal(actual_row, row):
+            del domain[i]
+            return domain
+        i += 1
+
+
+def forward_check(matrix, domain):
+    new_domain = []
+    matrix[-2:, :].sum(axis=0)
+    for row in domain:
+        row = row * 2
+
+    return
 
 def append_row(matrix, domain):
     for row in domain:
         '''Add vector to matrix and check constraints'''
         matrix = np.append(matrix, row, axis=0)
+        # print(matrix, '\n')
         if matrix.shape[0] == matrix.shape[1] and constraint_satisfied(matrix):
             return matrix
-        if constraint_satisfied(matrix):
+        elif constraint_satisfied(matrix):
             actual_domain = domain[:]
-            i = 0
-            for actual_row in actual_domain:
-                if np.array_equal(actual_row, row):
-                    del actual_domain[i]
-                i += 1
-            append_row(matrix, actual_domain)
-        else:
-            matrix = matrix[:-1, :]
-        if len(domain) == 0:
-            return 
+            actual_domain = del_from_domain(actual_domain, row)
+            return append_row(matrix, actual_domain)
+        matrix = matrix[:-1, :]
     return
 
-
 def solve_mosaic(rows):
+    j = 0
+    print(len(rows))
     for row in rows:
+        j += 1
         '''Set the first row and remove it from the domain'''
         matrix = row
         domain = rows[:]
         i = 0
-        for actual_row in rows:
-            if np.array_equal(actual_row, matrix):
-                del domain[i]
-            i += 1
+        domain = del_from_domain(domain, matrix)
         '''Start recurse'''
         ret = append_row(matrix, domain)
+        print(ret)
         if ret is not None:
             print("SOLVED")
             print(ret)
             return ret
+        else:
+            input("PRESS ENTER TO CONTINUE")
+            print("NO SOLUTION")
 
 
 def intersection(rowwise_matrix, columnwise_matrix):

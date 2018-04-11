@@ -73,12 +73,9 @@ def make_rows_vectors(rows):
 
 def constraint_satisfied(matrix):
     if (-3 in matrix[-3:, :].sum(axis=0) or 3 in matrix[-3:, :].sum(axis=0)) and matrix.shape[0] > 2:
-        # print(matrix)
-        # print(matrix[-3, :])
         return False
     if matrix.shape[1] == matrix.shape[0]:
-        if 0.0 in (pdist(matrix, metric='euclidean')):
-            print("JEST")
+        if 0. in (pdist(matrix.transpose(), metric='euclidean')):
             return False
     return True
 
@@ -94,14 +91,20 @@ def del_from_domain(domain, row):
 
 def forward_check(matrix, domain):
     new_domain = []
-    matrix[-2:, :].sum(axis=0)
+    summed_rows = matrix[-2:, :].sum(axis=0)
     for row in domain:
-        row = row * 2
+        doubled_row = 2 * row
+        if 0. not in summed_rows - doubled_row:
+            new_domain.append(row)
+    return new_domain
 
-    return
 
 def append_row(matrix, domain):
-    for row in domain:
+    if matrix.shape[0] > 1:
+        checked_domain = forward_check(matrix, domain)
+    else:
+        checked_domain = domain
+    for row in checked_domain:
         '''Add vector to matrix and check constraints'''
         matrix = np.append(matrix, row, axis=0)
         # print(matrix, '\n')
@@ -114,9 +117,9 @@ def append_row(matrix, domain):
         matrix = matrix[:-1, :]
     return
 
+
 def solve_mosaic(rows):
     j = 0
-    print(len(rows))
     for row in rows:
         j += 1
         '''Set the first row and remove it from the domain'''
@@ -126,28 +129,12 @@ def solve_mosaic(rows):
         domain = del_from_domain(domain, matrix)
         '''Start recurse'''
         ret = append_row(matrix, domain)
-        print(ret)
         if ret is not None:
             print("SOLVED")
             print(ret)
             return ret
-        else:
-            input("PRESS ENTER TO CONTINUE")
-            print("NO SOLUTION")
-
-
-def intersection(rowwise_matrix, columnwise_matrix):
-    rowwise = rowwise_matrix.reshape((rowwise_matrix.shape[0], rowwise_matrix.shape[1]**2))
-    columnwise = columnwise_matrix.reshape((columnwise_matrix.shape[0], columnwise_matrix.shape[1]**2))
-    print(rowwise)
-    print(rowwise.shape)
-    print(columnwise)
-    print(columnwise.shape)
-    for row in rowwise:
-        if any((columnwise[:] == row).all(1)):
-            return row
+    print("THERE IS NO SOLUTION FOR MOSAIC PROBLEM OF SIZE", rows[0].shape[1])
     return
-
 
 if __name__ == "__main__":
     map_size = int(input("Please specify the size: "))

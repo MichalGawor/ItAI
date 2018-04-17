@@ -1,6 +1,7 @@
 import itertools as it
 import numpy as np
 from scipy.spatial.distance import pdist
+import time
 
 '''
 This script finds a solution to CSP problem stated as:
@@ -151,8 +152,10 @@ def solve_mosaic(rows):
 
 if __name__ == "__main__":
     map_size = int(input("Please specify the size: "))
+    start = time.time()
     all_rows = []
     create_rows(map_size, all_rows)
     all_rows = make_rows_vectors(all_rows)
     solve_mosaic(all_rows)
-
+    finish = time.time()
+    print("It took ", finish-start, "s to solve mosaic")

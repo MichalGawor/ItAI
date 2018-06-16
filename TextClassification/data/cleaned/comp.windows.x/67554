@@ -1,0 +1,1 @@
+b'' b'' b'hi,' b'' b'does anyone know how to redirect the stdout and stderr of a program to' b'a callback function in x the program does not fork() a child process' b"so i guess i can't use pipes." b'' b'can anyone help b'' b'thanks,' b'' b'deepak' b'' 

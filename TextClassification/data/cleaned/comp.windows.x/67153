@@ -1,0 +1,1 @@
+b'' b'_sin' b'_cos' b'_pow' b'_floor' b'' b"link with '-lm' (math library)." b'' b'_get_wmshellwidgetclass' b'_get_applicationshellwidgetclass' b'' b"this is a bug in sun's shared libraries. linking with" b"'-assert nodefinitions' should do the trick." b'' b'n' 

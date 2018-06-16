@@ -1,0 +1,1 @@
+b'' b'mouseless operation is documented in the man pages for olwm and olvwm...' b"however, i can't get it to work in either." b'i have this line in my .xdefaults:' b'openwindows.keyboardcommands: full' b'' b'that should do it...' b"i haven't rebound the keys." b'am i missing something?' b'' b'-d' b'' 

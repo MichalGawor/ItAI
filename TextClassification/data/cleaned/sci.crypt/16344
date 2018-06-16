@@ -1,0 +1,1 @@
+b'' b'writes:' b'' b'| so, the question is: has a "fast" hash' b'| function been designed for hardware implementation b'' b'yes, you can use a stream cipher chip to hash data with only slight' b'modification. see:' b'' b"`a fast cryptographic checksum algorithm based on stream ciphers', x lai," b'ra rueppel, j woolven, auscrypt pp to b'' b'ross' 

@@ -1,0 +1,1 @@
+b'' b'' b'hi,' b'' b'has anybody implements an rpc server in the hp xwindows? in sun xview, there' b'is a notify_enable_rpc_svc() call that automatically executes the rpc processes' b'when it detects an incoming request. i wonder if there is a similar function in' b'hp x/motif that perform the same function.' b'' b'any help is appreciated.' b'' b'nui chan' 

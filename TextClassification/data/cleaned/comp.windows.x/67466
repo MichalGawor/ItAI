@@ -1,0 +1,1 @@
+b'' b'hi,' b'' b'we have a requirement for dynamically closing and opening' b'different display servers within an x application in a manner such' b'that at any time there is only one display associated with the client.' b'' b'assumming a proper cleanup is done during the transition should' b'we anticipate any problems.' b'' b'' b'kartik' b'' 

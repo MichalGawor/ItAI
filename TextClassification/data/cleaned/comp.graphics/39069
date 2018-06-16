@@ -1,0 +1,1 @@
+b'' b" a) xv can load a bit image, and display it in all it's" b'24 bit glory on bit x displays.' b' b) all other operations (crop, dither, smooth, etc.) are not' b'supported on bit images.' b'' b'how hard would this be?' b'' b'not very you just type "xloadimage" or "getx11" instead of "xv".' b'--' b'' b'======================================================================8--<' 

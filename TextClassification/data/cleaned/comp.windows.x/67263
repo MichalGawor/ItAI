@@ -1,0 +1,1 @@
+b'' b'' b'libxaw3d, the 3d athena widget set will greatly improve the' b'"sculptured" look. in linux, with its shared, jump-table libs, you' b"don't even have to recompile or relink. you merely have to:" b'ln -sf /lib/libxaw3d.so.3.0 /lib/libxaw.so.3' b'' b'' b'' b'thomas' 

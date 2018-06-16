@@ -1,0 +1,1 @@
+b'' b'' b'' b' there is a widget already defined for gl. it is the glxmdraw (motif) or' b' glxdraw (athena) widget. it is similar to a xmdrawingarea, except that it' b' allows you to use gl calls to render into the window. look at glxlink,' b' glxunlink, glxgetconfig, and glxwinset in the man pages.' b'' b'where do i get hold of these widgets?' b'' b'du pont pixel systems ltd.' 

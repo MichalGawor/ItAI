@@ -1,0 +1,1 @@
+b'' b'i writing a program that uses the parallel port. my problem is that i need to' b'generate an interrupt when the ack line is pulsed. i can get this to occur' b'once, but am unable to generate succesive interrupts.' b'' b'can someone suggest how i may resolve this problem.' b'' b'thanks.' b'' b'' 

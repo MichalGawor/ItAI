@@ -1,0 +1,1 @@
+b'' b'on the code i sent, please replace the line:' b'' b'xtaddcallback(popupshell, xtncallback, mypopup, (xtpointer)popupshell);' b'' b'by' b'' b'xtaddcallback(button, xtncallback, mypopup, (xtpointer)popupshell);' b'' b'---' b'' b'the rest (and my question) remains the same...' b'' b'dan' 

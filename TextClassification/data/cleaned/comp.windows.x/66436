@@ -1,0 +1,1 @@
+b'' b'i was having the same problems compiling x11r5 on a ipc sunos b"if you compile with 'make -k world' it will not stop on the" b'ld errors. as was stated in another post the clients with the' b'errors still run correctly.' b'' b'victor martinez' 

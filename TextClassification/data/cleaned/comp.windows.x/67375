@@ -1,0 +1,1 @@
+b'' b'' b' i do not have finger!!! so is there any other way of accessing this service' b' like mail server or telnet or ftp?' b'' b'you can use telnet:' b'' b'% xhost +atk.itc.cmu.edu' b'% telnet atk.itc.cmu.edu b'run-demo' 

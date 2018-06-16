@@ -1,0 +1,1 @@
+b'' b'i need to find a uart that will interface to an and do the following:' b'-250k baud, data bits, stop bits, no parity' b'-ability to do break detect (irq or output pin)' b'-irq on character received' b'' b"i'm using a dallas ds2250 at mhz clone), but it won't do" b"break detect. i've looked at the etc..." b'' b'any help would be appriciated!!!' 

@@ -1,0 +1,1 @@
+b'' b' anyway, at simulog, we will abandon xv. we were using it mostly for slide-' b' shows because of its "-loop" feature that display does not have (display' b' from the *wonderful* imagemagick package! :-d), but i think i will implement' b' it myself (even a shell-script should do the job) and forget xv.' b'' b'xli and xloadimage have a -goto flag.' b'' b'graeme gill.' 

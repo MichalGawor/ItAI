@@ -1,0 +1,1 @@
+b'' b' i think you mean circular, not recursive, but that is semantics.' b' recursiveness has no problems, it is just horribly inefficient (just ask' b' any assembly programmer.)' b'' b'tail-recursive functions in scheme are at least as efficient as iterative' b"loops. anyone who doesn't program in assembler will have heard of optimizing" b'compilers.' b'' b'' b'mathew' 

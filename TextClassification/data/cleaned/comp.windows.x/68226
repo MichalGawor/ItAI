@@ -1,0 +1,1 @@
+b'' b"i know nothing about sun's but replacing pieces of libraries, shared" b"or not, is straight forward on rs/6000's (all releases). extract the" b'appropriate pierce with ar; rebind the .o; and replace with ar.' b'see info for details.' b'' 

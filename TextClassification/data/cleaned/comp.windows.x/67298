@@ -1,0 +1,1 @@
+b'' b'you can also set the foreground to the xor of the foreground and background' b'colors: xsetforeground(..., fg bg); this works great for me (at least' b'with truecolor visuals).' 

@@ -1,0 +1,1 @@
+b'' b"i'm writing a driver that needs to remap some i/o ports. this means" b"virtual mode. unfortunately virtual mode means it won't get along" b'with expanded memory managers, so i need make it an emm driver too.' b'' b'does anyone out there have emm code. can any point me to an emm code source?' b'' b'-thanks, morgan' b'--' 

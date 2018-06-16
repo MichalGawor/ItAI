@@ -1,0 +1,1 @@
+b'' b'does anyone have enough experience to report whether disk data' b'compression has any effect on the optimal disk sector interleave?' b'offhand, i expect that the time required to decompress disk data' b'would increase the optimum disk sector interleave.' b'- alan hinds' 

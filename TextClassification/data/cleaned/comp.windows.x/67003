@@ -1,0 +1,1 @@
+b'' b'the short answer seems to be: "i don\'t".' b'the particular package (wscrawl) seems to reset *all* its defaults' b'if *any* of them are missing from the .xdefaults file. once i added' b'the missing ones to the .xdefaults file, the problem goes away.' b'' b'-kevin' b'--' b'kevin weinrich computer sciences corp.' 

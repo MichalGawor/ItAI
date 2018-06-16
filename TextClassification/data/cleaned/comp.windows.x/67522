@@ -1,0 +1,1 @@
+b'' b'i checked the faq on this first, and no luck..' b'' b'' b'i need to convert the r5 tree widget for use with xview v3.0. the' b'problem is the fact that xview uses their own event loop system, and i' b'was wondering if anyone had any tips (or converted source) on converting' b'these pups.' b'' b'' b'thanks,' b'' 

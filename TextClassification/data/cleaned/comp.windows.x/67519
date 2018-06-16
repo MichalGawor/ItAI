@@ -1,0 +1,1 @@
+b'' b'' b'rather than write my own, can anyone direct me to a package that will let me create' b'cascaded popup menus in x windows. for reasons of portability, the package should' b'not rely on any x toolkit other than xlib and the xt intrinsics. something written' b'in c++ would be nice, too.' b'' b'thanks' b'' b'' 
